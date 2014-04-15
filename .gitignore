@@ -1,4 +1,7 @@
-build/*
-tmp/*
-# vim swapfiles
+# vim swapfiles.
 *.sw?
+# temp stuff.
+tmp/*
+# gradle stuff.
+.gradle/*
+build/*
