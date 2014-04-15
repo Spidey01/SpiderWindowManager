@@ -1,0 +1,25 @@
+
+group 'com.spidey01.spiderwindowmanger'
+version '0.1-SNAPSHOT'
+description 'Spider: my own window manager ;)'
+
+apply plugin: 'cpp'
+
+executables {
+    main {
+        baseName 'spider-wm'
+    }
+}
+
+task makeVersionHeader() {
+    doLast {
+        def guard = "Spider_src_main_cpp_version_h"
+        new File("src/main/cpp/version.h").withWriter { out ->
+            out.writeLine("#ifndef ${guard}")
+            out.writeLine("#define ${guard}")
+            out.writeLine("#define SPIDER_VERSION \"${project.version}\"")
+            out.writeLine("#endif // !${guard}\n")
+        }
+    }
+}
+
