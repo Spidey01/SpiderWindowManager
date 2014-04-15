@@ -15,16 +15,34 @@
  */
 
 #include "Application.h"
+#include "version.h"
 
-#include <iostream>
 #include <cstdlib>
+#include <cstring>
+#include <iostream>
 
 
 namespace Spider {
 
+    static char *basename(char *path)
+    {
+        char *p = std::strrchr(path, '/');
+        ++p;
+        return p;
+    }
+
+
     Application::Application(int argc, char* argv[])
+        : mAppName(basename(argv[0]))
     {
         std::cout << "Application::Application(): called." << std::endl;
+
+        std::cout << "mAppName => " << mAppName << std::endl;
+        std::cout << "mOptionsList from: " << std::endl;
+        for (int i=1; i < argc; ++i) {
+            std::cout << "argv["<<i<<"] => " << argv[i] << std::endl;
+            mOptionsList.push_back(argv[i]);
+        }
     }
 
 
@@ -32,7 +50,56 @@ namespace Spider {
     Application::run()
     {
         std::cout << "Application::run(): called." << std::endl;
+
+        try {
+            return main();
+        } catch(std::exception& ex) {
+            std::clog << ex.what() << std::endl;
+            return EXIT_FAILURE;
+        }
+    }
+
+
+    int
+    Application::main()
+    {
+        std::cout << "Application::main(): called." << std::endl;
+
+        for (OptionsList::const_iterator it = mOptionsList.begin(); it != mOptionsList.end(); ++it) {
+            // std::string option = *it;
+            // std::cout << "option => " << opt << std::endl;
+
+            std::cout << "option => " << *it << std::endl;
+            if (*it == "-h" || *it == "-help" || *it == "--help") {
+                usage(std::cerr);
+                return EXIT_SUCCESS;
+            }
+            else if (*it == "-v" || *it == "--version") {
+                 std::cout << "Spider WM version " << SPIDER_VERSION << std::endl;
+                return EXIT_SUCCESS;
+            }
+            else {
+                std::cerr << mAppName << "unrecognized option: '" << *it << "'" << std::endl
+                          << "try `" << mAppName << " --help`' for more information."
+                          << std::endl;
+                // common value of EX_USAGE from sysexits.h.
+                return 64;
+            }
+        }
         return EXIT_SUCCESS;
+    }
+
+
+    void
+    Application::usage(std::ostream& to)
+    {
+        to << "usage: " << mAppName << " [OPTION]..."
+           << std::endl
+           << "    -h     display this help and exit."
+           << std::endl
+           << "    -v     output version information and exit"
+           << std::endl
+           ;
     }
 
 } // !Spider

@@ -26,26 +26,6 @@
 int
 main(int argc, char* argv[])
 {
-    static const char* options = "hv";
-    int i;
-    while ((i = getopt(argc, argv, options)) != -1) {
-        switch(i) {
-            case 'h': {
-                std::cout << "usage: " << argv[0] << " [OPTION]..."
-                          << std::endl
-                          << "    -h     display this help and exit."
-                          << "    -v     output version information and exit"
-                          << std::endl;
-                return EXIT_SUCCESS;
-            }
-            case 'v':
-                 std::cout << "Spider WM version " << SPIDER_VERSION << std::endl;
-                return EXIT_SUCCESS;
-            default:
-                return EXIT_FAILURE;
-        }
-    }
-
     Spider::Application app(argc, argv);
     return app.run();
 }
