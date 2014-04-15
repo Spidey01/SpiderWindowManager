@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include "Application.h"
 #include "version.h"
 
 #include <unistd.h>
@@ -44,6 +45,8 @@ main(int argc, char* argv[])
                 return EXIT_FAILURE;
         }
     }
-    return EXIT_SUCCESS;
+
+    Spider::Application app(argc, argv);
+    return app.run();
 }
 
