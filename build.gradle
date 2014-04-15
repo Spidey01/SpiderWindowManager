@@ -8,6 +8,9 @@ apply plugin: 'cpp'
 executables {
     main {
         baseName 'spider-wm'
+        binaries.all { b ->
+            linker.args '-lX11'
+        }
     }
 }
 
